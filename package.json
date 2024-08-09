@@ -1,0 +1,12 @@
+{
+  "name": "current_cats_iframe",
+  "version": "1.0.0",
+  "description": "Queries Wagtopia API to build an iframe of cats located at Topeka Cat Cafe for embedding into topekacatcafe.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Robert Greenstreet",
+  "license": "ISC",
+  "github-repository" : "https://github.com/rmgreenstreet/current-cats-iframe"
+}
