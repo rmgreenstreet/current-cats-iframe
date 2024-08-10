@@ -22,6 +22,7 @@ app.engine("ejs", ejsMate);
 
 app.use(express.static(path.join(__dirname, "/public")));
 
+// TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", async (req, res) => {
     const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
     // console.log(data.collection[0]);
