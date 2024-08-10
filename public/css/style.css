@@ -1,3 +1,13 @@
 body {
     background-color: #ebadd3;
 }
+
+.card-row {
+    position: relative;
+}
+
+/* .card-column {
+    position: absolute; 
+    left: 0%; 
+    top: 0px;
+} */
