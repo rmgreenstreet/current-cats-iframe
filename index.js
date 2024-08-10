@@ -29,6 +29,10 @@ app.get("/tcc/cats", async (req, res) => {
     res.render("iframe", {data});
 });
 
+app.all("*", (req, res) => {
+    res.send("This is not a valid page");
+})
+
 app.listen(process.env.PORT, () => {
     console.log("Express listening on port ", process.env.PORT);
 })
