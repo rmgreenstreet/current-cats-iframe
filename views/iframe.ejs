@@ -7,23 +7,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
     <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <title>Document</title>
+    <title>All Cats Iframe</title>
 </head>
 <body>
   <div class="container">
     <div class="row card-row" data-masonry='{"percentPosition": true }'>
       <% for (let cat of data.collection) { %>
         <div class="col-sm-6 col-lg-3 mb-4">
-          <img src="<%= cat.pet_image %>" alt="" srcset="" class="rounded-4 card-img-top">
+          <img src="<%= cat.images[0].image.url %>" alt="" srcset="" class="rounded-4 card-img-top">
           <div class="card my-1">
             <div class="card-body">
               <h4 class="card-title"><%= cat.name.slice(20) %></h4>
-              <h5 class="card-subtitle"><%= cat.coat_pattern %></h5>
+              <% if(typeof cat.coat_pattern !== undefined) { %>
+                <h5 class="card-subtitle"><%= cat.coat_pattern %></h5>
+              <% } %>
               <ul>
                 <li><%= cat.sex %></li>
-                <li>Age: <%= cat.numerical_age %></li>
+                <% if(typeof cat.numerical_age !== undefined) { %>
+                  <li>Age: <%= cat.numerical_age %></li>
+                <% } %>
               </ul>
               <p class="card-text"><%= cat.pet_internal_notes %></p>
+              <ul>
+                <li>
+                  Gets along with Dogs: <%= cat.is_ok_with_other_dogs %>
+                </li>
+                <li>
+                  Gets along with Cats: <%= cat.is_ok_with_other_cats %>
+                </li>
+                <li>
+                  Gets along with Children: <%= cat.is_ok_with_other_kids %>
+                </li>
+              </ul>
               <a href="https://petstablished.com/adoptions/questionnaire_redirect?application_type=Adopt" class="btn btn-dark">Adopt <%= cat.name.slice(20) %></a>
             </div>
           </div>
