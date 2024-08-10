@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 app.get("/tcc/cats", async (req, res) => {
     const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
-    console.log(data.collection[0]);
+    // console.log(data.collection[0]);
     res.render("iframe", {data});
 });
 
