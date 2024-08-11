@@ -147,7 +147,7 @@ app.post("/tcc/flyers", async (req, res) => {
     doc.fill("black")
         .fontSize(16)
         .moveDown(.2)
-        .text(`Age: ${cat.numerical_age}`, { align: "center" });
+        .text(`Birthday: ${cat.date_of_birth}`, { align: "center" });
     
     // Add Cat Description
     let descriptionText = removeEmoji(cat.pet_internal_notes);
