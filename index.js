@@ -52,6 +52,8 @@ app.post("/tcc/flyers", async (req, res) => {
     
     let doc = new PDFDocument({size: "LETTER"});
 
+    const pageTitle = `Meet ${cat.name.slice(20)}`
+
     // Set the response headers to indicate a file download
     // res.setHeader('Content-Type', 'application/pdf');
     // res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.name.slice(20)}.pdf"`);
@@ -61,11 +63,16 @@ app.post("/tcc/flyers", async (req, res) => {
     doc.circle(610, 2, 120).fill("#ebadd3");
     doc.circle(2, 790, 180).fill("#ebadd3");
 
+    let titleFontSize = 65;
+    if (pageTitle.length > 15) {
+        titleFontSize = 50;
+    } 
+
     // Add Cat Name
     doc.fill("#2e2a30")
         .font("./public/fonts/caveat-brush-latin-400-normal.ttf")
-        .fontSize(65)
-        .text(`Meet ${cat.name.slice(20)}`, (306-(doc.widthOfString(`Meet ${cat.name.slice(20)}`)/2)), 30);
+        .fontSize(titleFontSize)
+        .text(`Meet ${cat.name.slice(20)}`, (306-(doc.widthOfString(pageTitle)/2)), 30);
 
     // Add Cat Image
     // Fetch the image data using ky
