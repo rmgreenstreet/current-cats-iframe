@@ -5,3 +5,9 @@ body {
 .card-row {
     position: relative;
 }
+
+.flyer-body {
+    /* width: 8in;
+    height: 10.5in; */
+    background-color: white;
+}

@@ -7,7 +7,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import ky from "ky";
 import ejs from "ejs";
-import pdfkit from "pdfkit";
 import ejsMate from "ejs-mate";
 
 import asyncWrapper from "./utils/asyncWrapper.js";
@@ -43,7 +42,8 @@ app.post("/tcc/flyers", async (req, res) => {
     const listOfCats = req.body.selected;
     const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available&search[name]=${listOfCats.join(",")}`).json();
     // console.log(data.collection[0]);
-    res.render("individualFlyer", {data});
+    res.render("individualFlyer", {cat: data.collection[0]});
+    // res.send(data.collection[0])
 });
 
 app.all("*", (req, res) => {
