@@ -15,7 +15,7 @@
         <h1>Select Cats to Make Flyers For</h1>
         <form action="/tcc/flyers" method="post" class="form">
           <% for (let cat of data.collection) { %>
-            <input type="checkbox" name="selected[]" id="<%= cat.name.slice(20) %>" class="form-check-input" value="<%= cat.name.slice(20).trim() %>">
+            <input type="radio" name="selected[]" id="<%= cat.name.slice(20) %>" class="form-check-input" value="<%= cat.name.slice(20).trim() %>">
             <label for="<%= cat.name.slice(20) %>" class="form-label"><%= cat.name.slice(20) %></label>
             <br />
           <% } %>

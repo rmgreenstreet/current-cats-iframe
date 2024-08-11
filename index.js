@@ -51,7 +51,11 @@ app.post("/tcc/flyers", async (req, res) => {
     // Ok, we'll try just generating with pdfkit rather than rendering ejs and sending that in
     
     let doc = new PDFDocument({size: "LETTER"});
-    doc.pipe(res)
+
+    // Set the response headers to indicate a file download
+    // res.setHeader('Content-Type', 'application/pdf');
+    // res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.name.slice(20)}.pdf"`);
+    doc.pipe(res);
 
     // Add pink circles to top right and bottom left corners
     doc.circle(610, 2, 120).fill("#ebadd3");
@@ -72,7 +76,6 @@ app.post("/tcc/flyers", async (req, res) => {
     const convertedBuffer = await sharp(imageBuffer)
         .png() 
         .toBuffer();
-
     
     // Save the current graphics state
     doc.save();
@@ -80,14 +83,29 @@ app.post("/tcc/flyers", async (req, res) => {
     // Define the position/size of the circle
     const catPicX = 165;
     const catPicY = 225;
-    const catPicRadius = 115;
+    let catPicRadius = 115;
 
+    // Get image metadata
+    const metaData = await sharp(imageBuffer).metadata();
+    const { width, height } = metaData;
+
+    // Determine the scaling factor to fit the shorter dimension within the circle
+    const shortestDimension = Math.min(width, height);
+    const scaleFactor = (catPicRadius * 2) / shortestDimension; // Scale factor to fit the shortest dimension within the circle
+
+    // Calculate scaled dimensions
+    const displayWidth = width * scaleFactor;
+    const displayHeight = height * scaleFactor;
+
+    // Calculate offsets to center the image
+    const offsetX = catPicX - displayWidth / 2;
+    const offsetY = catPicY - displayHeight / 2;
+
+    // Clip the circle area and draw the image
     doc.circle(catPicX, catPicY, catPicRadius).clip();
-    
-    // Draw the image within the clipping path
-    doc.image(convertedBuffer, catPicX - catPicRadius, catPicY - catPicRadius, {
-        width: catPicRadius * 2,
-        height: catPicRadius * 2
+    doc.image(convertedBuffer, offsetX, offsetY, {
+        width: displayWidth,
+        height: displayHeight
     });
 
 
@@ -96,7 +114,13 @@ app.post("/tcc/flyers", async (req, res) => {
 
     // Add Adoption Form QR Code
     const qrUri = await QRCode.toDataURL(cat.pet_adoption_url);
-    doc.image(qrUri, catPicX + 225, catPicY - catPicRadius)
+    doc.image(qrUri, catPicX + 160, catPicY - 115)
+
+    // Add QR Code Label
+    doc.moveDown()
+        .font("./public/fonts/chilanka-latin-400-normal.ttf")
+        .fontSize(24)
+        .text("Scan To Adopt",  catPicX + 170, catPicY + 68 )
 
     // Add Cat Color Pattern
     let descriptivePattern = cat.pet_attributes.filter((attribute) => attribute.id === 36802)
@@ -140,8 +164,6 @@ app.post("/tcc/flyers", async (req, res) => {
         .list(isOkArray, { align: "center", listType: "none" });
 
     doc.end();
-    // res.render("individualFlyer", {cat: data.collection[0]});
-    // res.send(data.collection[0]);
 });
 
 app.all("*", (req, res) => {
