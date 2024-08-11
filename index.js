@@ -55,8 +55,8 @@ app.post("/tcc/flyers", async (req, res) => {
     const pageTitle = `Meet ${cat.name.slice(20)}`
 
     // Set the response headers to indicate a file download
-    // res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.name.slice(20)}.pdf"`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.name.slice(20)}.pdf"`);
     doc.pipe(res);
 
     // Add pink circles to top right and bottom left corners
