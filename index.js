@@ -73,6 +73,9 @@ app.post("/tcc/flyers", async (req, res) => {
         .font("./public/fonts/caveat-brush-latin-400-normal.ttf")
         .fontSize(titleFontSize)
         .text(`Meet ${cat.name.slice(20)}`, (306-(doc.widthOfString(pageTitle)/2)), 30);
+    
+    // Save the current graphics state
+    doc.save();
 
     // Add Cat Image
     // Fetch the image data using ky
@@ -83,9 +86,6 @@ app.post("/tcc/flyers", async (req, res) => {
     const convertedBuffer = await sharp(imageBuffer)
         .png() 
         .toBuffer();
-    
-    // Save the current graphics state
-    doc.save();
 
     // Define the position/size of the circle
     const catPicX = 165;
