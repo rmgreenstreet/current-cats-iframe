@@ -63,7 +63,7 @@ app.post("/tcc/flyers", async (req, res) => {
     doc.circle(2, 790, 180).fill("#ebadd3");
 
     let titleFontSize = 70;
-    if (pageTitle.length > 20) {
+    if (pageTitle.length > 15) {
         titleFontSize = 50;
     } 
 
