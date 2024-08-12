@@ -136,8 +136,7 @@ app.post("/tcc/flyers", async (req, res) => {
     doc.image(qrUri, catPicX + 160, catPicY - 115)
 
     // Add QR Code Label
-    doc.moveDown()
-        .font("./public/fonts/chilanka-latin-400-normal.ttf")
+    doc.font("./public/fonts/chilanka-latin-400-normal.ttf")
         .fontSize(24)
         .text("Scan To Adopt",  catPicX + 170, catPicY + 68 )
 
