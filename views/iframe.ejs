@@ -18,8 +18,17 @@
           <div class="card my-1">
             <div class="card-body">
               <h4 class="card-title"><%= cat.name.slice(20) %></h4>
+              <% // Add Cat Color Pattern
+              let descriptivePattern = cat.pet_attributes.filter((attribute) => attribute.id === 36802)
+              if (!descriptivePattern.value || descriptivePattern.value === "N/A") {
+                  let patternString = [cat.primary_color]
+                  if (cat.secondary_color && cat.secondary_color !== "N/A") {patternString.push(`& ${cat.secondary_color}`)}
+                  if (cat.tertiary_color && cat.tertiary_color !== "N/A") {patternString.push(`& ${cat.tertiary_color}`)}
+                  if (cat.coat_pattern && cat.coat_pattern !== "N/A") {patternString.push(cat.coat_pattern)}
+                  descriptivePattern = patternString.join(" ");
+              } %>
               <% if(typeof cat.coat_pattern !== undefined) { %>
-                <h5 class="card-subtitle"><%= cat.coat_pattern %></h5>
+                <h5 class="card-subtitle"><%= descriptivePattern %></h5>
               <% } %>
               <ul>
                 <li><%= cat.sex %></li>

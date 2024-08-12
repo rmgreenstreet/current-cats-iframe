@@ -167,8 +167,8 @@ app.post("/tcc/flyers", async (req, res) => {
     
     // Add Cat Description
     let descriptionText = removeEmoji(cat.pet_internal_notes);
-    if(descriptionText.length > 600) {
-        descriptionText = descriptionText.slice(0, 600);
+    if(descriptionText.length > 500) {
+        descriptionText = descriptionText.slice(0, 500);
         descriptionText += "...";
     }
     doc.fontSize(20).text(descriptionText, 50, 440, {
