@@ -12,6 +12,8 @@ import PDFDocument from "pdfkit";
 import ejsMate from "ejs-mate";
 
 import asyncWrapper from "./utils/asyncWrapper.js";
+import removeEmoji from "./utils/removeEmoji.js";
+import checkNumberOfAdults from "./utils/checkNumberOfAdults.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -27,10 +29,6 @@ app.engine("ejs", ejsMate);
 
 app.use(express.static(path.join(__dirname, "/public")));
 
-const removeEmoji = (text) => {
-    return text.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '');
-}
-
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", asyncWrapper(
     async (req, res) => {
@@ -43,8 +41,8 @@ app.get("/tcc/cats", asyncWrapper(
 app.get("/tcc/flyers", asyncWrapper( 
     async (req, res) => {
         const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
-        // console.log(data.collection[0]);
-        res.render("flyers", {data});
+        const adults = await checkNumberOfAdults(data.collection);
+        res.render("flyers", {data, adults});
     })
 );
 

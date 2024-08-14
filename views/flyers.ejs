@@ -11,8 +11,8 @@
 <body>
   <div class="container">
     <div class="row my-2">
-      <div class="col col-6 col-sm-12">
-        <h1>Select Cat to Make Flyer For</h1>
+      <h1>Select Cat to Make Flyer For</h1>
+      <div class="col-6">
         <form action="/tcc/flyers" method="post" class="form">
           <% for (let cat of data.collection) { %>
             <input type="radio" name="selected[]" id="<%= cat.name.slice(20) %>" class="form-check-input" value="<%= cat.name.slice(20).trim() %>">
@@ -21,6 +21,12 @@
           <% } %>
           <button type="submit" class="btn btn-dark">Submit</button>
         </form>
+      </div>
+      <div class="col-6">
+        <h2><%= `There are ${adults.length} adults at the cafe: ` %></h2>
+        <% for (let adult of adults) { %>
+        <%- adult %>
+        <% } %>
       </div>
     </div>
   </div>
