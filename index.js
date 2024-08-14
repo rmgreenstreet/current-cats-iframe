@@ -32,17 +32,21 @@ const removeEmoji = (text) => {
 }
 
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
-app.get("/tcc/cats", async (req, res) => {
-    const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
-    // console.log(data.collection[0]);
-    res.render("iframe", {data});
-});
+app.get("/tcc/cats", asyncWrapper(
+    async (req, res) => {
+        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
+        // console.log(data.collection[0]);
+        res.render("iframe", {data});
+    })
+);
 
-app.get("/tcc/flyers", async (req, res) => {
-    const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
-    // console.log(data.collection[0]);
-    res.render("flyers", {data});
-});
+app.get("/tcc/flyers", asyncWrapper( 
+    async (req, res) => {
+        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`).json();
+        // console.log(data.collection[0]);
+        res.render("flyers", {data});
+    })
+);
 
 app.post("/tcc/flyers", async (req, res) => {
     const listOfCats = req.body.selected;
@@ -73,7 +77,7 @@ app.post("/tcc/flyers", async (req, res) => {
         .fontSize(titleFontSize)
         .text(`Meet ${cat.name.slice(20)}`, (306-(doc.widthOfString(pageTitle)/2)), 15, { width: 500});
     
-    // Save the current graphics state
+    // Save the current graphics state before creating a clipped area
     doc.save();
 
     // Add Cat Image
