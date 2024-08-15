@@ -185,6 +185,15 @@ app.post("/tcc/flyers", async (req, res) => {
     doc.end();
 });
 
+app.get("/health", async (req, res) => {
+    const testData = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=1&search[status]=Available`).json();
+    if (testData) {
+        res.status(200).send("OK");
+    } else {
+        res.status(502).send("There is a problem with the Petstablished API");
+    }
+})
+
 app.all("*", (req, res) => {
     res.send("This is not a valid page");
 })
