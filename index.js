@@ -190,6 +190,7 @@ app.get("/health", async (req, res) => {
     if (testData.collection.length > 0) {
         res.status(200).send("OK");
     } else {
+        console.log(testData);
         res.status(502).send("There is a problem with the Petstablished API");
     }
 })
