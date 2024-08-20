@@ -49,7 +49,7 @@
                   Gets along with Children: <%= cat.is_ok_with_other_kids %>
                 </li>
               </ul>
-              <a href="https://petstablished.com/adoptions/questionnaire_redirect?application_type=Adopt" class="btn btn-dark">Adopt <%= cat.name.slice(20) %></a>
+              <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.name.slice(20) %></a>
             </div>
           </div>
         </div>
