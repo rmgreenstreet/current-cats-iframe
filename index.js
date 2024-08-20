@@ -134,7 +134,7 @@ app.post("/tcc/flyers", async (req, res) => {
 
 
     // Add Adoption Form QR Code
-    const qrUri = await QRCode.toDataURL(cat.pet_adoption_url);
+    const qrUri = await QRCode.toDataURL(`https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=${cat.adoption_form_id}&pet_id=${cat.id}`);
     doc.image(qrUri, catPicX + 160, catPicY - 115)
 
     // Add QR Code Label
