@@ -188,7 +188,7 @@ app.post("/tcc/flyers", async (req, res) => {
         }
     
         let patternFontSize = 45; 
-        if (descriptivePattern.length > 20) { patternFontSize = 35}
+        if (descriptivePattern.length > 20) { patternFontSize = 25}
         doc.fill("#345c72")
             .font("./public/fonts/chilanka-latin-400-normal.ttf")
             .fontSize(patternFontSize)
