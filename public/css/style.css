@@ -11,3 +11,32 @@ body {
     height: 10.5in; */
     background-color: white;
 }
+
+.text-container .read-more {
+    display: block;
+    margin-top: 10px;
+}
+.text-container .cat-description {
+    overflow: hidden;
+}
+
+.text-container .cat-description.truncated {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-height: 1.2em; /* Adjust depending on the line height */
+}
+
+.text-container .cat-description .morecontent {
+    display: none; /* Hide the additional content by default */
+}
+
+.text-container .cat-description .moreellipses {
+    display: inline; /* Show the ellipses after the visible text */
+}
+
+.text-container .cat-description .morelink {
+    display: inline; /* Ensure the 'Read more' link is always visible */
+    cursor: pointer; /* Show pointer cursor on hover */
+    color: #007bff; /* Optional: add color to match Bootstrap link color */
+    text-decoration: underline; /* Optional: underline to indicate it's a link */
+}
