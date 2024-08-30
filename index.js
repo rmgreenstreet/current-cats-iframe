@@ -85,6 +85,7 @@ app.post("/tcc/flyers", async (req, res) => {
             }
         }).json();
         const cat = data.collection[0];
+        if (!cat.pet_internal_notes){ cat.pet_internal_notes = "We're still getting to know this little one! Check back soon for a more accurate description." }
         
         let doc = new PDFDocument({size: "LETTER", margin: 24});
     
