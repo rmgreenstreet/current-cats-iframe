@@ -53,7 +53,7 @@
                 <% } %>
               </ul>
               <div class="text-container">
-                <p class="card-text cat-description mb-2"><%= cat.pet_internal_notes %></p>
+                <p class="card-text cat-description mb-2"><%= cat.pet_internal_notes ? cat.pet_internal_notes : defaultDescription %></p>
               </div>
               <ul>
                 <li>

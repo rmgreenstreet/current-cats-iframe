@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", asyncWrapper(
     async (req, res) => {
+        const defaultDescription = "We're still getting to know this little one's personality! Check back soon for an accurate description of this cutie."
         try {
             const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`, {
                 retry: {
@@ -42,7 +43,7 @@ app.get("/tcc/cats", asyncWrapper(
                 }
             }).json();
             // console.log(data.collection[0]);
-            res.render("iframe", {data});
+            res.render("iframe", {data, defaultDescription});
         } catch (error) {
             console.error(error);
             res.status(502)
