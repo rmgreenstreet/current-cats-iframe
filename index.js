@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", asyncWrapper(
     async (req, res) => {
+        console.log("Loading cats iframe")
         const defaultDescription = "We're still getting to know this little one's personality! Check back soon for an accurate description of this cutie."
         try {
             const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`, {
@@ -42,7 +43,7 @@ app.get("/tcc/cats", asyncWrapper(
                     backoffLimit: 3000
                 }
             }).json();
-            // console.log(data.collection[0]);
+            console.log("Found cats:", data.collection.length);
             res.render("iframe", {data, defaultDescription});
         } catch (error) {
             console.error(error);
@@ -54,6 +55,7 @@ app.get("/tcc/cats", asyncWrapper(
 
 app.get("/tcc/flyers", asyncWrapper( 
     async (req, res) => {
+        console.log("Loading flyer selection")
         try {
             const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`, {
                 retry: {
@@ -64,6 +66,7 @@ app.get("/tcc/flyers", asyncWrapper(
                 }
             }).json();
             const adults = await checkNumberOfAdults(data.collection);
+            console.log("Found cats:", data.collection.length);
             res.render("flyers", {data, adults});
         } catch (error) {
             console.error(error);
@@ -74,6 +77,7 @@ app.get("/tcc/flyers", asyncWrapper(
 );
 
 app.post("/tcc/flyers", async (req, res) => {
+    console.log("Building flyer PDF")
     try {
         const listOfCats = req.body.selected;
         const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available&search[name]=${listOfCats.join(",")}`, {
@@ -85,6 +89,7 @@ app.post("/tcc/flyers", async (req, res) => {
             }
         }).json();
         const cat = data.collection[0];
+        console.log("Found cat:", cat.name.slice(20).trim());
         if (!cat.pet_internal_notes){ cat.pet_internal_notes = "We're still getting to know this little one! Check back soon for a more accurate description." }
         
         let doc = new PDFDocument({size: "LETTER", margin: 24});
@@ -246,6 +251,7 @@ app.get("/health", async (req, res) => {
 })
 
 app.all("*", (req, res) => {
+    console.log("Request received for invalid path:", req.path)
     res.send("This is not a valid page");
 })
 
