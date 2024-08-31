@@ -14,6 +14,7 @@ import ejsMate from "ejs-mate";
 import asyncWrapper from "./utils/asyncWrapper.js";
 import removeEmoji from "./utils/removeEmoji.js";
 import checkNumberOfAdults from "./utils/checkNumberOfAdults.js";
+import catFormatChecking from "./utils/catFormatChecking.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -43,11 +44,18 @@ app.get("/tcc/cats", asyncWrapper(
                     backoffLimit: 3000
                 }
             }).json();
+            if (data.collection.length) {
+                for (let cat of data.collection) {
+                    cat = catFormatChecking(cat);
+                };
+            } else {
+                throw new (error);
+            }
             console.log("Found cats:", data.collection.length);
             res.render("iframe", {data, defaultDescription});
         } catch (error) {
             console.error(error);
-            res.status(502)
+            res.status(502);
             res.send("There was an issue with the Petstablished server. Please try again in a few seconds. If the issue persists, please contact admin@topekacatcafe.com")
         }
     })
