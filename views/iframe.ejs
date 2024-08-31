@@ -26,18 +26,27 @@
 </head>
 <body>
   <div class="container">
+    <% try { %> 
     <div class="row">
       <div class="col text-center mb-3">
-        <h5>You'll Find <%= data.collection.length %> Friendly Felines at Topeka Cat Cafe Today!</h5>
+        <% if( data && data.collection.length) { %>
+          <h5>You'll Find <%= data.collection.length %> Friendly Felines at Topeka Cat Cafe Today!</h5>
+        <% } else { %>
+          <% throw new Error() %>
+        <% } %>
       </div>
     </div>
     <div class="row card-row" >
       <% for (let cat of data.collection) { %>
         <div class="col-sm-6 col-lg-3 mb-4">
-          <img src="<%= cat.images[0].image.url %>" alt="" srcset="" class="rounded-4 card-img-top">
+          <img src="<%= cat.images[0].image ? cat.images[0].image.url : "https://c972d5be6d3bb1aba721.cdn6.editmysite.com/uploads/b/c972d5be6d3bb1aba7212c6919fb3035ad50bd02f14253ece5c803d30c75f9a1/TCC%20v1%20White%20Bg%201_1718382480.png?optimize=medium" %>" alt="<%= cat.name ? cat.name : "Cat" %> Image" srcset="" class="rounded-4 card-img-top">
           <div class="card my-1">
             <div class="card-body">
-              <h4 class="card-title"><%= cat.name.slice(20) %></h4>
+              <% if (cat.name && cat.name.length) { %> 
+                <h4 class="card-title"><%= cat.name.slice(20) %></h4>
+              <% } else { %>
+              <% throw new Error() %>
+              <% } %>
               <% // Add Cat Color Pattern
               let descriptivePattern = cat.pet_attributes.filter((attribute) => attribute.id === 36802)
               if (!descriptivePattern.value || descriptivePattern.value === "N/A") {
@@ -53,8 +62,12 @@
               <% } %>
               <ul>
                 <li><%= cat.sex %></li>
-                <% if(typeof cat.numerical_age !== undefined) { %>
+                <% if(cat.numerical_age) { %>
                   <li>Age: <%= cat.numerical_age %></li>
+                <% } else if (cat.date_of_birth) { %> 
+                  <li>Birthday: <%= cat.date_of_birth %></li>
+                <% } else { %>
+                  <% throw new Error(); %>
                 <% } %>
               </ul>
               <div class="text-container">
@@ -62,21 +75,28 @@
               </div>
               <ul>
                 <li>
-                  Gets along with Dogs: <%= cat.is_ok_with_other_dogs %>
+                  Gets along with Dogs: <%= cat.is_ok_with_other_dogs ? cat.is_ok_with_other_dogs : "Not Sure" %>
                 </li>
                 <li>
-                  Gets along with Cats: <%= cat.is_ok_with_other_cats %>
+                  Gets along with Cats: <%= cat.is_ok_with_other_cats ? cat.is_ok_with_other_cats : "Not Sure" %>
                 </li>
                 <li>
-                  Gets along with Children: <%= cat.is_ok_with_other_kids %>
+                  Gets along with Children: <%= cat.is_ok_with_other_kids ? cat.is_ok_with_other_kidss : "Not Sure" %>
                 </li>
               </ul>
-              <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.name.slice(20) %></a>
+              <% if (cat.adoption_form_id && cat.id && cat.name.length) { %> 
+                <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.name.slice(20) %></a>
+              <% } else { %>
+                <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=57871">Adopt This Cutie</a>
+              <% } %>
             </div>
           </div>
         </div>
       <% } %>
     </div>
+    <% } catch { %>
+      <h1>There was an error displaying the page</h1><p>Please try again in a few seconds. If the issue persists, please visit <a href="https://teamkitten.org">Team Kitten</a> directly and contact admin@topekacatcafe.com</p> 
+    <% }%>
   </div>
 </body>
 </html>
