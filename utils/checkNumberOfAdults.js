@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 export default function (cats) {
     const fourMonthsAgo = new Date();
     fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 4);
