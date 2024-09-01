@@ -27,15 +27,6 @@
 <body>
   <div class="container">
     <% try { %> 
-    <div class="row">
-      <div class="col text-center mb-3">
-        <% if( data && data.collection.length) { %>
-          <h5>You'll Find <%= data.collection.length %> Friendly Felines at Topeka Cat Cafe Today!</h5>
-        <% } else { %>
-          <% throw new Error() %>
-        <% } %>
-      </div>
-    </div>
     <div class="row card-row" >
       <% for (let cat of data.collection) { %>
         <div class="col-sm-6 col-lg-3 mb-4">
