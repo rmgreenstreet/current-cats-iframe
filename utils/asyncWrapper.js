@@ -1,5 +1,7 @@
-export default function(fn) {
+const asyncWrapper = function(fn) {
     return (req, res, next) => {
         fn(req, res, next).catch(next)
     }
 }
+
+export default asyncWrapper;
