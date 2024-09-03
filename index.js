@@ -26,6 +26,7 @@ const app = express();
 
 app.use(express.urlencoded({extended : true}));
 app.use(express.json());
+app.use(express.json());
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -33,6 +34,11 @@ app.set("view engine", "ejs");
 app.engine("ejs", ejsMate);
 
 app.use(express.static(path.join(__dirname, "/public")));
+
+//Connect to Mongoose with an initial 5 second delay before next attempt, if failed
+connectToMongoose(5000);
+
+app.use("/square", squareRoutes)
 
 //Connect to Mongoose with an initial 5 second delay before next attempt, if failed
 connectToMongoose(5000);
@@ -268,6 +274,7 @@ app.get("/health", async (req, res) => {
 })
 
 app.all("*", (req, res) => {
+    console.log("Invalid request received for", req.path)
     console.log("Invalid request received for", req.path)
     res.send("This is not a valid page");
 })
