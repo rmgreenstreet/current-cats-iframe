@@ -15,6 +15,9 @@ import asyncWrapper from "./utils/asyncWrapper.js";
 import removeEmoji from "./utils/removeEmoji.js";
 import checkNumberOfAdults from "./utils/checkNumberOfAdults.js";
 import catFormatChecking from "./utils/catFormatChecking.js";
+import connectToMongoose from "./utils/connectToMongoose.js";
+
+import squareRoutes from "./routes/squareRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -29,6 +32,11 @@ app.set("view engine", "ejs");
 app.engine("ejs", ejsMate);
 
 app.use(express.static(path.join(__dirname, "/public")));
+
+//Connect to Mongoose with an initial 5 second delay before next attempt, if failed
+connectToMongoose(5000);
+
+app.use("/square", squareRoutes)
 
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", asyncWrapper(
