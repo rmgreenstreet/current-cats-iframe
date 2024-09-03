@@ -19,6 +19,7 @@ import { successLogColors, warnLogColors, errorLogColors } from "../utils/logCol
 const createMissingLoyaltyAccount = async (customer) => {
     try {
         const loyaltyProgram = await loyaltyApi.retrieveLoyaltyProgram('main');
+        console.log("Loyalty program found:", loyaltyProgram);
         const { result: newLoyaltyAccountResponse } = await loyaltyApi.createLoyaltyAccount({
             loyaltyAccount: {
                 programId: loyaltyProgram.program.id,
@@ -82,7 +83,8 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
             // console.warn(`Loyalty account not found for payment ${payment.id}`);
             // return;
         } else {
-            loyaltyAccount = await createMissingLoyaltyAccount(customer);
+            console.log("No loyalty account found. Creating account for", customer.id)
+            await createMissingLoyaltyAccount(customer);
         }
 
         const updatedLoyaltyAccountResponse = await loyaltyApi.accumulateLoyaltyPoints(loyaltyAccount.id, {
