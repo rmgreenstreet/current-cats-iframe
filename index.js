@@ -24,6 +24,7 @@ const __dirname = path.dirname(__filename); // get the name of the directory
 const app = express();
 
 app.use(express.urlencoded({extended : true}));
+app.use(express.json());
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -252,6 +253,7 @@ app.get("/health", async (req, res) => {
 })
 
 app.all("*", (req, res) => {
+    console.log("Invalid request received for", req.path)
     res.send("This is not a valid page");
 })
 
