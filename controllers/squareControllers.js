@@ -55,12 +55,10 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
         const customerResponse = await customersApi.retrieveCustomer(payment.customer_id);
         console.log("customerResponse:", customerResponse.result)
         const customer = customerResponse.result.customer;
-        // console.log(customer)
 
         if (customer && customer.givenName) transactionInfo.given_name = customer.givenName;
         if (customer && customer.familyName) transactionInfo.family_name = customer.familyName;
 
-        // console.log("Customer found. Attempting to find loyalty account for:", customer.givenName, customer.familyName);
         console.log("Attempting to find loyalty account for customer ID", payment.customer_id);
         const loyaltyAccountResponse = await loyaltyApi.searchLoyaltyAccounts({
             query: {
@@ -73,14 +71,6 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
         if (loyaltyAccountResponse.result.loyaltyAccounts && loyaltyAccountResponse.result.loyaltyAccounts.length) {
             loyaltyAccount = loyaltyAccountResponse.result.loyaltyAccounts[0];
             console.log("Found loyalty account:", loyaltyAccount);
-
-            // transactionInfo.result = {
-            //     status: "FAILED",
-            //     reason: "No Loyalty Account"
-            // };
-            // await transactionInfo.save();
-            // console.warn(`Loyalty account not found for payment ${payment.id}`);
-            // return;
         } else {
             console.log("No loyalty account found. Creating account for", customer.id)
             await createMissingLoyaltyAccount(customer);
@@ -95,6 +85,7 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
         });
         console.log("updatedLoyaltyAccountResponse:", updatedLoyaltyAccountResponse);
 
+        // Given that above, loyaltyAccount is assigned from loyaltyAccountResponse.result, even though the log of loyaltyAccountResponse doesn't have that, just the array of loyaltyAccounts, I would initially think I'd have to assign this the same way, but I think this destructuring should work based on what loyaltyAccountResponse actually looks like
         const { loyaltyAccount: updatedLoyaltyAccount } = await loyaltyApi.retrieveLoyaltyAccount(loyaltyAccount.id);
 
         transactionInfo.loyalty_account = {
