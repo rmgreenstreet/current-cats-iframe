@@ -94,8 +94,9 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
             locationId: payment.location_id,
             idempotencyKey: crypto.randomUUID()
         });
+        console.log("updatedLoyaltyAccountResponse:", updatedLoyaltyAccountResponse);
 
-        const updatedLoyaltyAccount = updatedLoyaltyAccountResponse.result.loyaltyAccount;
+        const { loyalty_account: updatedLoyaltyAccount } = await loyaltyApi.retrieveLoyaltyAccount(loyaltyAccount.id);
 
         transactionInfo.loyalty_account = {
             id: loyaltyAccount.id,
