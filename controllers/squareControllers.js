@@ -67,8 +67,7 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
                 customerIds: [payment.customer_id]
             }
         });
-
-        console.log("loyaltyAccountResponse:", loyaltyAccountResponse.result)
+        
         let loyaltyAccount;
 
         if (loyaltyAccountResponse.result.loyaltyAccounts && loyaltyAccountResponse.result.loyaltyAccounts.length) {
@@ -96,7 +95,7 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
         });
         console.log("updatedLoyaltyAccountResponse:", updatedLoyaltyAccountResponse);
 
-        const { loyalty_account: updatedLoyaltyAccount } = await loyaltyApi.retrieveLoyaltyAccount(loyaltyAccount.id);
+        const { loyaltyAccount: updatedLoyaltyAccount } = await loyaltyApi.retrieveLoyaltyAccount(loyaltyAccount.id);
 
         transactionInfo.loyalty_account = {
             id: loyaltyAccount.id,
