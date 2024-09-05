@@ -258,10 +258,10 @@ app.get("/health", async (req, res) => {
     try {
         const testData = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=1&search[status]=Available`, {
             retry: {
-                limit: 3,
+                limit: 5,
                 methods: ['get'],
                 statusCodes: [413, 429, 503],
-                backoffLimit: 3000
+                backoffLimit: 10000
             }
         }).json();
         if (testData.collection.length > 0) {
