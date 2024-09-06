@@ -72,7 +72,7 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
             loyaltyAccount = loyaltyAccountResponse.result.loyaltyAccounts[0];
             console.log("Found loyalty account:", loyaltyAccount);
         } else {
-            console.log("No loyalty account found. Creating account for", customer.id)
+            console.log("No loyalty account found. Creating account for", customer)
             await createMissingLoyaltyAccount(customer);
         }
 
