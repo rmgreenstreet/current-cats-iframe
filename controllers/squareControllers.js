@@ -19,7 +19,7 @@ import { successLogColors, warnLogColors, errorLogColors } from "../utils/logCol
 const createMissingLoyaltyAccount = async (customer) => {
     try {
         const loyaltyProgram = await loyaltyApi.retrieveLoyaltyProgram('main');
-        console.log("Loyalty program found:", loyaltyProgram);
+        // console.log("Loyalty program found:", loyaltyProgram);
         const { result: newLoyaltyAccountResponse } = await loyaltyApi.createLoyaltyAccount({
             loyaltyAccount: {
                 programId: loyaltyProgram.program.id,
@@ -53,8 +53,8 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
 
         console.log("Attempting to find customer with ID", payment.customer_id);
         // const customerResponse = await customersApi.retrieveCustomer(payment.customer_id);
-        const { customer } = await customersApi.retrieveCustomer(payment.customer_id);
-        // const customer = customerResponse.result.customer;
+        const { result: customer } = await customersApi.retrieveCustomer(payment.customer_id);
+        console.log(customer);
 
         if (customer && customer.givenName) transactionInfo.given_name = customer.givenName;
         if (customer && customer.familyName) transactionInfo.family_name = customer.familyName;
