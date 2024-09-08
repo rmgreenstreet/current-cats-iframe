@@ -19,10 +19,10 @@ import { successLogColors, warnLogColors, errorLogColors } from "../utils/logCol
 const createMissingLoyaltyAccount = async (customer) => {
     try {
         const loyaltyProgram = await loyaltyApi.retrieveLoyaltyProgram('main');
-        // console.log("Loyalty program found:", loyaltyProgram);
+        console.log("Loyalty program found:", loyaltyProgram);
         const { result: newLoyaltyAccountResponse } = await loyaltyApi.createLoyaltyAccount({
             loyaltyAccount: {
-                programId: loyaltyProgram.program.id,
+                programId: loyaltyProgram.result.id,
                 mapping: {
                     phoneNumber: customer.phoneNumber
                 }
