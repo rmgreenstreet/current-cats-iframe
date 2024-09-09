@@ -67,7 +67,7 @@ const addLoyaltyPoints = async (payment, transactionInfo) => {
                 customerIds: [customer.id]
             }
         });
-        
+        console.log("loyaltyAccountResponse:", loyaltyAccountResponse)
         let loyaltyAccount;
 
         if (loyaltyAccountResponse.result.loyaltyAccounts && loyaltyAccountResponse.result.loyaltyAccounts.length) {
