@@ -87,9 +87,9 @@
                 <div class="col">
                   <% if (cat.age) { %>
                     <% if (cat.age === "Kitten") { %>
-                      <a href="https://TopekaCatCafe.as.me/kittenroom" target="_blank">Schedule an Appointment</a>
+                      <a href="https://TopekaCatCafe.as.me/kittenroom" class="btn btn-dark"  target="_blank">Schedule an Appointment</a>
                     <% } else { %> 
-                      <a href="https://TopekaCatCafe.as.me/catlounge" target="_blank">Schedule an Appointment</a>
+                      <a href="https://TopekaCatCafe.as.me/catlounge" class="btn btn-dark"  target="_blank">Schedule an Appointment</a>
                     <% } %>
                   <% } %>
                 </div>
@@ -97,7 +97,7 @@
                   <% if (cat.adoption_form_id && cat.id && cat.name.length) { %> 
                     <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.name.slice(20) %></a>
                   <% } else { %>
-                    <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=57871" target="_blank">Adopt This Cutie</a>
+                    <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=57871" class="btn btn-dark"  target="_blank">Adopt This Cutie</a>
                   <% } %>
                 </div>
               </div>
