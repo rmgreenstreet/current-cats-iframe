@@ -67,6 +67,8 @@
                     <p class="card-text kitten-room-invite">Come meet <%= cat.name.slice(20) %> in our <a href="https://TopekaCatCafe.as.me/kittenroom" target="_blank">Kitten Room</a>!</p>
                   <% } else { %> 
                     <p class="card-text cat-lounge-invite">Come meet <%= cat.name.slice(20) %> in our main <a href="https://TopekaCatCafe.as.me/catlounge" target="_blank">Cat Lounge</a>!</p>
+                  <% }  else { %> 
+                    <p class="card-text cat-lounge-invite">Come meet this cutie <a href="https://TopekaCatCafe.as.me/" target="_blank">in person</a>!</p>
                   <% } %>
                 <% } %>
                 <p class="card-text cat-description"><%= cat.pet_internal_notes ? cat.pet_internal_notes : defaultDescription %></p>
