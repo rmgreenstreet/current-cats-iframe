@@ -28,7 +28,7 @@
   <div class="container">
     <% try { %> 
     <div class="row card-row" >
-      <% for (let cat of data.collection) { %>
+      <% for (let cat of catsData) { %>
         <div class="col-sm-6 col-lg-3 mb-4">
           <img src="<%= cat.images[0].image ? cat.images[0].image.url : "https://c972d5be6d3bb1aba721.cdn6.editmysite.com/uploads/b/c972d5be6d3bb1aba7212c6919fb3035ad50bd02f14253ece5c803d30c75f9a1/TCC%20v1%20White%20Bg%201_1718382480.png?optimize=medium" %>" alt="<%= cat.name ? cat.name : "Cat" %> Image" srcset="" class="rounded-4 card-img-top">
           <div class="card my-1">
