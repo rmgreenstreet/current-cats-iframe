@@ -16,6 +16,7 @@ import removeEmoji from "./utils/removeEmoji.js";
 import checkNumberOfAdults from "./utils/checkNumberOfAdults.js";
 import catFormatChecking from "./utils/catFormatChecking.js";
 import connectToMongoose from "./utils/connectToMongoose.js";
+import getCatsList from "./utils/getCatsList.js";
 
 import squareRoutes from "./routes/squareRoutes.js";
 
@@ -45,26 +46,16 @@ app.get("/tcc/cats", asyncWrapper(
     async (req, res) => {
         console.log("Loading cats iframe")
         const defaultDescription = "We're still getting to know this little one's personality! Check back soon for an accurate description of this cutie."
+        const organizations = JSON.parse(process.env.ORGANIZATIONS);
+        let catsData = [];
         try {
-            const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`, {
-                retry: {
-                    limit: 3,
-                    methods: ['get'],
-                    statusCodes: [413, 429, 503],
-                    backoffLimit: 3000
-                }
-            }).json();
-            if (data.collection.length) {
-                for (let cat of data.collection) {
-                    cat = catFormatChecking(cat);
-                };
-            } else {
-                throw new (error);
+            for (let org of organizations) {
+                catsData.push(...await getCatsList(org));
             }
-            console.log("Found cats:", data.collection.length);
-            res.render("iframe", {data, defaultDescription});
-        } catch (error) {
-            console.error(error);
+            console.log("Total Cats Found:", catsData.length);
+            res.render("iframe", {catsData, defaultDescription});
+        } catch (err) {
+            console.error(err);
             res.status(502);
             res.send("There was an issue with the Petstablished server. Please try again in a few seconds. If the issue persists, please contact admin@topekacatcafe.com")
         }
@@ -251,7 +242,7 @@ app.post("/tcc/flyers", async (req, res) => {
 
 app.get("/health", async (req, res) => {
     try {
-        const testData = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=1&search[status]=Available`, {
+        const testData = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.TEAM_KITTEN_PUBLIC_KEY}&pagination[limit]=1&search[status]=Available`, {
             retry: {
                 limit: 5,
                 methods: ['get'],
