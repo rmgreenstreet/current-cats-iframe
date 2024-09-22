@@ -38,12 +38,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 //Connect to Mongoose with an initial 5 second delay before next attempt, if failed
 // connectToMongoose(5000);
 
-app.use("/square", squareRoutes)
-
-//Connect to Mongoose with an initial 5 second delay before next attempt, if failed
-connectToMongoose(5000);
-
-app.use("/square", squareRoutes)
+app.use("/square", squareRoutes);
 
 // TODO Add error handling, because it's unlikely the petstablished api will have 100% uptime
 app.get("/tcc/cats", asyncWrapper(
