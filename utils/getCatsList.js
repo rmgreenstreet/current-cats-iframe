@@ -15,12 +15,13 @@ const getCatsList = async(org) => {
         if (data.collection.length) {
             for (let cat of data.collection) {
                 cat = catFormatChecking(cat);
+                cat.organization_info = org;
             };
         } else {
             console.log("No cats found for Organization", org.name);
             return [];
         }
-        console.log("Found",data.collection.length, "cats for",org.name);
+        console.log("Found", data.collection.length, "cats for",org.name);
         // console.log("data after format checking:", data);
         return data.collection;
     } catch (err) {
