@@ -43,9 +43,8 @@
                   <li>Age: <%= cat.numerical_age %></li>
                 <% } else if (cat.date_of_birth) { %> 
                   <li>Birthday: <%= cat.date_of_birth %></li>
-                <% } else { %>
-                  <% throw new Error(); %>
                 <% } %>
+                <li>Adoption Fee: $<%= cat.adoption_fee %></li>
               </ul>
               <div class="text-container">
                 <% if (cat.age) { %>
@@ -69,6 +68,7 @@
                   Gets along with Children: <%= cat.is_ok_with_other_kids ? cat.is_ok_with_other_kids : "Not Sure" %>
                 </li>
               </ul>
+              <p class="adoption-fee-message"><%= cat.name.slice(20).trim() %>'s Adoption Fee of $<%= cat.adoption_fee %> goes directly to <a href="https://teamkitten.org" target="_blank">Team Kitten</a> or <a href="https://www.streetcatsclub.org/" target="_blank">Street Cats Club</a> to support their mission!</p>
               <div class="row">
                 <div class="col">
                   <% if (cat.age) { %>
