@@ -1,5 +1,6 @@
 import ky from "ky";
 import catFormatChecking from "./catFormatChecking.js";
+import formatAge from "./formatAge.mjs";
 
 const getCatsList = async(org) => {
     try {
@@ -16,6 +17,7 @@ const getCatsList = async(org) => {
             for (let cat of data.collection) {
                 cat = catFormatChecking(cat);
                 cat.organization_info = org;
+                cat.numerical_age = formatAge(cat.date_of_birth);
             };
         } else {
             console.log("No cats found for Organization", org.name);
