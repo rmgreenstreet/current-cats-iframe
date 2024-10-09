@@ -396,8 +396,8 @@ const onDemandDisplay = async (req, res, next) => {
     try {
         const loyaltyAccountsList = await listLoyaltyAccounts();
         const expectedTime = Math.round(loyaltyAccountsList.length / 30);
-        const startTime = new Date(Date.now()).toLocaleTimeString();
-        const finishTime = new Date(Date.now() + expectedTime * 60 * 1000).toLocaleTimeString();
+        const startTime = new Date(Date.now()).toLocaleTimeString("en-US");
+        const finishTime = new Date(Date.now() + expectedTime * 60 * 1000).toLocaleTimeString("en-US");
         res.send(`<div style="margin-left: 20%; margin-top: 3em"><h1>Loyalty Points Update Started</h1> <h2>${loyaltyAccountsList.length} Loyalty Accounts To Process</h2><p>This page will not update after loyalty points have been processed.</p><p>Accounts take about 2 seconds each to process, so please allow at least ${expectedTime} minutes</p><p>Started: ${startTime}. Expected Completion: ${finishTime}.</p></div>`);
         await correctLoyaltyPoints();
     } catch (err) {
