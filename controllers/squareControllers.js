@@ -2,12 +2,12 @@ import { Client, Environment, ApiError } from "square";
 
 // Set up Square API client
 const environment = process.env.NODE_ENV === 'production'
-  ? Environment.Production
-  : Environment.Sandbox;
+    ? Environment.Production
+    : Environment.Sandbox;
 
 const client = new Client({
-  environment,
-  accessToken: process.env.SQUARE_ACCESS_TOKEN
+    environment,
+    accessToken: process.env.SQUARE_ACCESS_TOKEN
 });
 
 const { loyaltyApi, ordersApi, customersApi } = client;
@@ -15,6 +15,14 @@ const { loyaltyApi, ordersApi, customersApi } = client;
 import ProcessedInfo from "../models/processedInfo.js";
 import { successLogColors, warnLogColors, errorLogColors } from "../utils/logColors.js";
 
+
+const delay = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function isEmpty(obj) {
+    return !Object.keys(obj).length;
+}
 
 const createMissingLoyaltyAccount = async (customer) => {
     try {
@@ -32,7 +40,7 @@ const createMissingLoyaltyAccount = async (customer) => {
         });
         console.log("Successfully created Loyalty Account for customer:", customer.id)
         return newLoyaltyAccountResponse.loyaltyAccount;
-        
+
     } catch (error) {
         console.error("Error in createMissingLoyaltyAccount:", error);
         return error;
@@ -220,11 +228,11 @@ const listLoyaltyAccounts = async () => {
     let customerArray = []
     try {
         let listLoyaltyResponse = await loyaltyApi.searchLoyaltyAccounts({ limit: limit });
-  
+
         while (!isEmpty(listLoyaltyResponse.result)) {
             let customers = listLoyaltyResponse.result.loyaltyAccounts;
             customerArray.push(...customers);
-  
+
             let cursor = listLoyaltyResponse.result.cursor;
             if (cursor) {
                 listLoyaltyResponse = await loyaltyApi.searchLoyaltyAccounts({
@@ -237,7 +245,7 @@ const listLoyaltyAccounts = async () => {
         }
         console.log(`Retrieved ${customerArray.length} loyalty accounts`)
         return customerArray;
-  
+
     } catch (error) {
         if (error instanceof ApiError) {
             error.result.errors.forEach(function (e) {
@@ -249,14 +257,14 @@ const listLoyaltyAccounts = async () => {
             console.log("Unexpected error occurred: ", error);
         }
     }
-  };
-  
+};
+
 const onDemandDisplay = async (req, res, next) => {
     try {
         const loyaltyAccountsList = await listLoyaltyAccounts();
-        const expectedTime = Math.round(loyaltyAccountsList.length/30);
+        const expectedTime = Math.round(loyaltyAccountsList.length / 30);
         const startTime = new Date(Date.now()).toLocaleTimeString();
-        const finishTime = new Date(Date.now() + expectedTime*60*1000).toLocaleTimeString();
+        const finishTime = new Date(Date.now() + expectedTime * 60 * 1000).toLocaleTimeString();
         res.send(`<div style="margin-left: 20%; margin-top: 3em"><h1>Loyalty Points Update Started</h1> <h2>${loyaltyAccountsList.length} Loyalty Accounts To Process</h2><p>This page will not update after loyalty points have been processed.</p><p>Accounts take about 2 seconds each to process, so please allow at least ${expectedTime} minutes</p><p>Started: ${startTime}. Expected Completion: ${finishTime}.</p></div>`);
         // await correctLoyaltyPoints();
     } catch (err) {
