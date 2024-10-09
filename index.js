@@ -65,17 +65,15 @@ app.get("/tcc/cats", asyncWrapper(
 app.get("/tcc/flyers", asyncWrapper( 
     async (req, res) => {
         console.log("Loading flyer selection")
+        const organizations = JSON.parse(process.env.ORGANIZATIONS);
+        let data = [];
         try {
-            const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available`, {
-                retry: {
-                    limit: 3,
-                    methods: ['get'],
-                    statusCodes: [413, 429, 503],
-                    backoffLimit: 3000
-                }
-            }).json();
-            const adults = await checkNumberOfAdults(data.collection);
-            console.log("Found cats:", data.collection.length);
+            for (let org of organizations) {
+                data.push(...await getCatsList(org));
+            }
+            console.log("Total Cats Found:", data.length);
+            const adults = await checkNumberOfAdults(data);
+            console.log("Found cats:", data.length);
             res.render("flyers", {data, adults});
         } catch (error) {
             console.error(error);
@@ -86,10 +84,10 @@ app.get("/tcc/flyers", asyncWrapper(
 );
 
 app.post("/tcc/flyers", async (req, res) => {
-    console.log("Building flyer PDF")
+    console.log("Building flyer PDF");
     try {
-        const listOfCats = req.body.selected;
-        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${process.env.PUBLIC_KEY}&pagination[limit]=100&search[status]=Available&search[name]=${listOfCats.join(",")}`, {
+        const selectedCat = JSON.parse(req.body.selectedCat);
+        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${selectedCat.public_key}&pagination[limit]=100&search[status]=Available&search[name]=${selectedCat.name}`, {
             retry: {
                 limit: 3,
                 methods: ['get'],
