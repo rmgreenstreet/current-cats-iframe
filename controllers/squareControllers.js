@@ -213,4 +213,56 @@ const updatedPaymentRequestHandler = async (req, res, next) => {
     }
 };
 
-export { updatedPaymentRequestHandler }
+
+const listLoyaltyAccounts = async () => {
+    console.log("Retrieving all Loyalty Accounts");
+    const limit = 200;
+    let customerArray = []
+    try {
+        let listLoyaltyResponse = await loyaltyApi.searchLoyaltyAccounts({ limit: limit });
+  
+        while (!isEmpty(listLoyaltyResponse.result)) {
+            let customers = listLoyaltyResponse.result.loyaltyAccounts;
+            customerArray.push(...customers);
+  
+            let cursor = listLoyaltyResponse.result.cursor;
+            if (cursor) {
+                listLoyaltyResponse = await loyaltyApi.searchLoyaltyAccounts({
+                    cursor: cursor,
+                    limit: limit
+                });
+            } else {
+                break;
+            }
+        }
+        console.log(`Retrieved ${customerArray.length} loyalty accounts`)
+        return customerArray;
+  
+    } catch (error) {
+        if (error instanceof ApiError) {
+            error.result.errors.forEach(function (e) {
+                console.log(e.category);
+                console.log(e.code);
+                console.log(e.detail);
+            });
+        } else {
+            console.log("Unexpected error occurred: ", error);
+        }
+    }
+  };
+  
+const onDemandDisplay = async (req, res, next) => {
+    try {
+        const loyaltyAccountsList = await listLoyaltyAccounts();
+        const expectedTime = Math.round(loyaltyAccountsList.length/30);
+        const startTime = new Date(Date.now()).toLocaleTimeString();
+        const finishTime = new Date(Date.now() + expectedTime*60*1000).toLocaleTimeString();
+        res.send(`<div style="margin-left: 20%; margin-top: 3em"><h1>Loyalty Points Update Started</h1> <h2>${loyaltyAccountsList.length} Loyalty Accounts To Process</h2><p>This page will not update after loyalty points have been processed.</p><p>Accounts take about 2 seconds each to process, so please allow at least ${expectedTime} minutes</p><p>Started: ${startTime}. Expected Completion: ${finishTime}.</p></div>`);
+        // await correctLoyaltyPoints();
+    } catch (err) {
+        console.log(err);
+        res.send("There was an issue updating loyalty account point amounts. Please refresh the page to try again. If the issue persists, contact robertgreenstreet@gmail.com");
+    }
+}
+
+export { updatedPaymentRequestHandler, onDemandDisplay }
