@@ -56,7 +56,7 @@
                   <% } %>
                 <% } %>
                 <p class="card-text cat-description"><%= cat.pet_internal_notes ? cat.pet_internal_notes : defaultDescription %></p>
-                <p class="card-text adoption-order mb-3">Make sure to either <a href="https://TopekaCatCafe.as.me/<%= cat.age === "Kitten" ? "kittenroom" : "catlounge" %>" target="_blank">schedule an appointment</a> or walk in to meet <%= cat.name.slice(20) %> before completing an adoption application!</p>
+                <p class="card-text adoption-order mb-3">In order to get to know <%= cat.name.slice(20) %>, make sure to either <a href="https://TopekaCatCafe.as.me/<%= cat.age === "Kitten" ? "kittenroom" : "catlounge" %>" target="_blank">schedule an appointment</a> or walk in to meet them before completing an adoption application!</p>
               </div>
               <ul>
                 <li>
