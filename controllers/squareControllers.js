@@ -221,6 +221,25 @@ const updatedPaymentRequestHandler = async (req, res, next) => {
     }
 };
 
+const getLocations = async () => {
+    console.log("Getting Location ID");
+    try {
+        let listLocationsResponse = await locationsApi.listLocations();
+        let locations = listLocationsResponse.result.locations;
+        console.log(`Got location ID of ${locations[0].id}`)
+        return locations[0].id;
+    } catch (error) {
+        if (error instanceof ApiError) {
+            error.result.errors.forEach(function (e) {
+                console.log(e.category);
+                console.log(e.code);
+                console.log(e.detail);
+            });
+        } else {
+            console.log("Unexpected error occurred: ", error);
+        }
+    }
+};
 
 const listLoyaltyAccounts = async () => {
     console.log("Retrieving all Loyalty Accounts");
@@ -246,6 +265,120 @@ const listLoyaltyAccounts = async () => {
         console.log(`Retrieved ${customerArray.length} loyalty accounts`)
         return customerArray;
 
+    } catch (error) {
+        if (error instanceof ApiError) {
+            error.result.errors.forEach(function (e) {
+                console.log(e.category);
+                console.log(e.code);
+                console.log(e.detail);
+            });
+        } else {
+            console.log("Unexpected error occurred: ", error);
+        }
+    }
+};
+
+const accumulateLoyaltyDollars = async (customer, locationId) => {
+    try {
+        let totalLoyaltyDollars = 0;
+        const limit = 5
+        let listOrdersResponse = await ordersApi.searchOrders({
+            locationIds: [locationId],
+            limit: limit,
+            query: {
+                filter: {
+                    customerFilter: {
+                        customerIds: [customer.customerId]
+                    },
+                    dateTimeFilter: {
+                        startAt: customer.enrolledAt
+                    }
+                }
+            }
+        });
+
+        while (!isEmpty(listOrdersResponse.result)) {
+            let orders = listOrdersResponse.result.orders;
+            // We'll need an orders.reduce function to accumulate the total number of dollars spent on these orders, then we'll compare that to customer.lifetimePoints
+            const loyaltyDollarsAccumulator = orders.reduce((total, order) => {
+                // Have to parseInt because amounts are stored as number of cents with "n" at the end for some reason
+                return total + parseInt(order.totalMoney.amount);
+            }, 0);
+            totalLoyaltyDollars += Math.floor(loyaltyDollarsAccumulator / 100);
+
+            let cursor = listOrdersResponse.result.cursor;
+            if (cursor) {
+                listOrdersResponse = await ordersApi.searchOrders({
+                    locationIds: [locationId],
+                    limit: limit,
+                    cursor: cursor,
+                    query: {
+                        filter: {
+                            customerFilter: {
+                                customerIds: [customer.customerId]
+                            },
+                            dateTimeFilter: {
+                                startAt: customer.enrolledAt
+                            }
+                        }
+                    }
+                });
+            } else {
+                break;
+            }
+        }
+        // console.log(`${customer.customerId} total loyalty dollars: ${totalLoyaltyDollars}`)
+        // Return total loyalty dollars for this customer
+        return totalLoyaltyDollars;
+    } catch (error) {
+        if (error instanceof ApiError) {
+            error.result.errors.forEach(function (e) {
+                console.log(e.category);
+                console.log(e.code);
+                console.log(e.detail);
+            });
+        } else {
+            console.log("Unexpected error occurred: ", error);
+        }
+    }
+};
+
+const compareAndUpdateLoyaltyAmounts = async (customer, loyaltyTotal) => {
+    try {
+        if (loyaltyTotal > customer.lifetimePoints) {
+            const difference = loyaltyTotal - customer.lifetimePoints;
+            console.log(`Customer ${customer.id} is missing ${loyaltyTotal - customer.lifetimePoints} Loyalty Points`);
+            await loyaltyApi.adjustLoyaltyPoints(customer.id, { idempotencyKey: randomUUID(), adjustPoints: { loyaltyProgramId: customer.programId, points: difference, reason: "Acuity Scheduling Points" } });
+
+            console.log(successLogColors, "Added", difference, "to customer", customer.id);
+        } else {
+            console.log(customer.id, "Has the correct number of points");
+            return;
+        }
+        console.log("Points Updated Successfully");
+        return;
+    } catch (error) {
+        if (error instanceof ApiError) {
+            error.result.errors.forEach(function (e) {
+                console.log(e.category);
+                console.log(e.code);
+                console.log(e.detail);
+            });
+        } else {
+            console.log("Unexpected error occurred: ", error);
+        }
+    }
+};
+
+const correctLoyaltyPoints = async () => {
+    try {
+        const myLocation = await getLocations();
+        const loyaltyEnrollees = await listLoyaltyAccounts();
+        for (let customer of loyaltyEnrollees) {
+            const loyaltyTotal = await accumulateLoyaltyDollars(customer, myLocation);
+            await compareAndUpdateLoyaltyAmounts(customer, loyaltyTotal);
+            await delay(100);  // Delay after each customer
+        };
     } catch (error) {
         if (error instanceof ApiError) {
             error.result.errors.forEach(function (e) {
