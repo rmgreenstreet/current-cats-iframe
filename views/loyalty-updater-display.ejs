@@ -1,0 +1,7 @@
+<% layout('boilerplate') -%>
+    <div id="loyalty-updater-display" class="mt-3">
+        <h1>Loyalty Points Update Started</h1>
+        <h2><%= loyaltyAccountsList.length %> Loyalty Accounts to Process</h2>
+        <p>This page will not update after loyalty points have been processed.</p>
+        <p>Accounts take about 2 seconds each to process, so please allow at least <%= expectedTime %> minutes</p><p>Started: <%= startTime %>. Expected Completion: <%= finishTime %>.</p>
+    </div>
