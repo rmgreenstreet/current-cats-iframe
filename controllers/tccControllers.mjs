@@ -135,12 +135,19 @@ const buildFlyer = async (cat, res) => {
     .text(birthDateString, (290 - (doc.widthOfString(birthDateString) / 2)), 400);
 
   // Add Cat Description
+  let descriptionFontSize = 20
   let descriptionText = removeEmoji(cat.pet_internal_notes);
-  if (descriptionText.length > 500) {
+  if (descriptionText.length > 550) {
+    descriptionFontSize = 17
+  }
+  if (descriptionText.length > 600) {
+    descriptionFontSize = 15
+  }
+  if (descriptionText.length > 650) {
     descriptionText = descriptionText.slice(0, 500);
     descriptionText += "...";
   }
-  doc.fontSize(20).text(descriptionText, 50, 440, {
+  doc.fontSize(descriptionFontSize).text(descriptionText, 50, 440, {
     width: 500,
     align: 'justify'
   });
