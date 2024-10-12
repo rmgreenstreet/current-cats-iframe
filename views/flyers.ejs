@@ -4,8 +4,8 @@
   <div class="col-6">
     <form action="/tcc/flyers" method="post" class="form">
       <% for (let cat of data) { %>
-      <input type="radio" name="selectedCat" id="<%= cat.name.slice(20) %>" class="form-check-input" value='{"name":"<%= cat.name.slice(20).trim() %>","public_key":"<%= cat.organization_info.public_key %>"}'>
-      <label for="<%= cat.name.slice(20) %>" class="form-label"><%= cat.name.slice(20) %> (<%= cat.organization_info.name %>)</label>
+      <input type="radio" name="selectedCat" id="<%= cat.id %>" class="form-check-input" value='{"id":"<%= cat.id %>","public_key":"<%= cat.organization_info.public_key %>"}'>
+      <label for="<%= cat.id %>" class="form-label"><%= cat.name.slice(20) %> (<%= cat.organization_info.name %>)</label>
       <br />
       <% } %>
       <button type="submit" class="btn btn-dark">Submit</button>

@@ -60,6 +60,6 @@ app.all("*", (req, res) => {
     res.send("This is not a valid page");
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT = 3000, () => {
     console.log("Express listening on port ", process.env.PORT);
 });
