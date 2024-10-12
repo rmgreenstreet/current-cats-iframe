@@ -1,4 +1,5 @@
 export default function (cat) {
+        const defaultDescription = "We're still getting to know this little one's personality! Check back soon for an accurate description of this cutie."
     if (!cat.name) {
         cat.name = "New Cafe Cat";
     }
@@ -19,6 +20,9 @@ export default function (cat) {
     }
     if (!cat.is_ok_with_other_kids) {
         cat.is_ok_with_other_kids = "Not Sure"
+    }
+    if (!cat.pet_internal_notes) {
+        cat.pet_internal_notes = defaultDescription;
     }
     return cat;
 }
