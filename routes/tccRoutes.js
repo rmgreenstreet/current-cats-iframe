@@ -37,7 +37,9 @@ router.get("/flyers", asyncWrapper(async (req, res) => {
 router.post("/flyers", asyncWrapper(async (req, res) => {
     try {
         const selectedCat = JSON.parse(req.body.selectedCat);
-        const data = await fetchAllCatsData(selectedCat.id);
+        // console.log("selectedCat", selectedCat);
+        const data = await fetchAllCatsData(selectedCat.name.slice(20).trim());
+        // console.log("data:", data);
         const cat = data[0];
         console.log("Building flyer for:", cat.name.slice(20).trim());
         return await buildFlyer(cat, res);

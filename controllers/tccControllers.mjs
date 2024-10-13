@@ -6,11 +6,11 @@ import QRCode from 'qrcode';
 import getCatsList from "../utils/getCatsList.js";
 import removeEmoji from "../utils/removeEmoji.js";
 
-const fetchAllCatsData = async (catId = null) => {
+const fetchAllCatsData = async (catName = "") => {
   let data = [];
   const organizations = JSON.parse(process.env.ORGANIZATIONS);
   for (let org of organizations) {
-    data.push(...await getCatsList(org, catId));
+    data.push(...await getCatsList(org, catName));
   }
   return data;
 };

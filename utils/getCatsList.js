@@ -2,9 +2,9 @@ import ky from "ky";
 import catFormatChecking from "./catFormatChecking.js";
 import formatAge from "./formatAge.mjs";
 
-const getCatsList = async(org, catId = "") => {
+const getCatsList = async(org, catName = "") => {
     try {
-        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${org.public_key}&pagination[limit]=100&search[status]=Available&search[id]=${catId}`, {
+        const data = await ky.get(`https://petstablished.com/api/v2/public/pets?public_key=${org.public_key}&pagination[limit]=100&search[status]=Available&search[name]=${catName}`, {
             retry: {
                 limit: 3,
                 methods: ['get'],
