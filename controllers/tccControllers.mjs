@@ -18,11 +18,11 @@ const fetchAllCatsData = async (catName = "") => {
 const buildFlyer = async (cat, res) => {
   let doc = new PDFDocument({ size: "LETTER", margin: 24 });
 
-  const pageTitle = `Meet ${cat.name.slice(20).trim()}`
+  const pageTitle = `Meet ${cat.display_name}`
 
   // Set the response headers to indicate a file download
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.name.slice(20).trim()}.pdf"`);
+  res.setHeader('Content-Disposition', `attachment; filename="Meet ${cat.display_name}.pdf"`);
   doc.pipe(res);
 
   // Add pink circles to top right and bottom left corners
@@ -41,7 +41,7 @@ const buildFlyer = async (cat, res) => {
   doc.fill("#2e2a30")
     .font("./public/fonts/caveat-brush-latin-400-normal.ttf")
     .fontSize(titleFontSize)
-    .text(`Meet ${cat.name.slice(20)}`, (306 - (doc.widthOfString(pageTitle) / 2)), 15, { width: 500 });
+    .text(`Meet ${cat.display_name}`, (306 - (doc.widthOfString(pageTitle) / 2)), 15, { width: 500 });
 
   // Save the current graphics state before creating a clipped area
   doc.save();

@@ -18,6 +18,7 @@ const getCatsList = async(org, catName = "") => {
                 cat = catFormatChecking(cat);
                 cat.organization_info = org;
                 cat.numerical_age = formatAge(cat.date_of_birth);
+                cat.display_name = cat.name.slice(org.name_prefix_length, (cat.name.length - org.name_suffix_length)).trim();
             };
         } else {
             console.log("No cats found for Organization", org.name);

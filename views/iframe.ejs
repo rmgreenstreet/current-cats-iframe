@@ -7,7 +7,7 @@
           <div class="card my-1">
             <div class="card-body">
               <% if (cat.name && cat.name.length) { %> 
-                <h4 class="card-title"><%= cat.name.slice(20) %></h4>
+                <h4 class="card-title"><%= cat.display_name %></h4>
               <% } else { %>
               <% throw new Error() %>
               <% } %>
@@ -36,13 +36,13 @@
               <div class="text-container">
                 <% if (cat.age) { %>
                   <% if (cat.age === "Kitten") { %>
-                    <p class="card-text kitten-room-invite">Come meet <%= cat.name.slice(20) %> in our <a href="https://TopekaCatCafe.as.me/kittenroom" target="_blank">Kitten Room</a>!</p>
+                    <p class="card-text kitten-room-invite">Come meet <%= cat.display_name %> in our <a href="https://TopekaCatCafe.as.me/kittenroom" target="_blank">Kitten Room</a>!</p>
                   <% } else { %> 
-                    <p class="card-text cat-lounge-invite">Come meet <%= cat.name.slice(20) %> in our main <a href="https://TopekaCatCafe.as.me/catlounge" target="_blank">Cat Lounge</a>!</p>
+                    <p class="card-text cat-lounge-invite">Come meet <%= cat.display_name %> in our main <a href="https://TopekaCatCafe.as.me/catlounge" target="_blank">Cat Lounge</a>!</p>
                   <% } %>
                 <% } %>
                 <p class="card-text cat-description"><%= cat.pet_internal_notes ? cat.pet_internal_notes : defaultDescription %></p>
-                <p class="card-text adoption-order mb-3">Make sure to either <a href="https://TopekaCatCafe.as.me/<%= cat.age === "Kitten" ? "kittenroom" : "catlounge" %>" target="_blank">schedule an appointment</a> or walk in to meet <%= cat.name.slice(20) %> before completing an adoption application!</p>
+                <p class="card-text adoption-order mb-3">Make sure to either <a href="https://TopekaCatCafe.as.me/<%= cat.age === "Kitten" ? "kittenroom" : "catlounge" %>" target="_blank">schedule an appointment</a> or walk in to meet <%= cat.display_name %> before completing an adoption application!</p>
               </div>
               <ul>
                 <li>
@@ -56,7 +56,7 @@
                 </li>
               </ul>
               <% if (cat.adoption_fee) { %> 
-                <p class="adoption-fee-message"><%= cat.name.slice(20).trim() %>'s Adoption Fee of $<%= cat.adoption_fee %> goes directly to <a href="<%= cat.organization_info.website ?  cat.organization_info.website : "https://teamkitten.org" %>"" target="_blank"><%= cat.organization_info.name ? cat.organization_info.name : "Team Kitten" %></a> to support their mission!</p>
+                <p class="adoption-fee-message"><%= cat.display_name %>'s Adoption Fee of $<%= cat.adoption_fee %> goes directly to <a href="<%= cat.organization_info.website ?  cat.organization_info.website : "https://teamkitten.org" %>"" target="_blank"><%= cat.organization_info.name ? cat.organization_info.name : "Team Kitten" %></a> to support their mission!</p>
               <% } %>
               <div class="row">
                 <div class="col">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col">
                   <% if (cat.adoption_form_id && cat.id && cat.name.length) { %> 
-                    <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.name.slice(20) %></a>
+                    <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=<%= cat.adoption_form_id %>&pet_id=<%= cat.id %>" class="btn btn-dark" target="_blank">Adopt <%= cat.display_name %></a>
                   <% } else { %>
                     <a href="https://petstablished.com/adoptions/personal-information?application_type=Adopt&form_id=57871" class="btn btn-dark"  target="_blank">Adopt This Cutie</a>
                   <% } %>

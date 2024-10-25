@@ -38,10 +38,10 @@ router.post("/flyers", asyncWrapper(async (req, res) => {
     try {
         const selectedCat = JSON.parse(req.body.selectedCat);
         // console.log("selectedCat", selectedCat);
-        const data = await fetchAllCatsData(selectedCat.name.slice(20).trim());
+        const data = await fetchAllCatsData(selectedCat.name);
         // console.log("data:", data);
         const cat = data[0];
-        console.log("Building flyer for:", cat.name.slice(20).trim());
+        console.log("Building flyer for:", cat.name);
         return await buildFlyer(cat, res);
     } catch (err) {
         console.error(err);

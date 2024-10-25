@@ -6,7 +6,7 @@ export default function (cats) {
     })
     let adultsText = [];
     for (let cat of numberOfAdults) {
-      adultsText.push(`<p>Name: ${cat.name.slice(20)}, Birth Date: ${cat.date_of_birth}</p>`)
+      adultsText.push(`<p>Name: ${cat.display_name}, Birth Date: ${cat.date_of_birth}</p>`)
     }
     return adultsText;
 }
