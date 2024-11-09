@@ -17,6 +17,7 @@ const getCatsList = async(org, catName = "") => {
             for (let cat of data.collection) {
                 cat = catFormatChecking(cat);
                 cat.organization_info = org;
+                console.log("Formatting cat:", cat.name);
                 cat.numerical_age = formatAge(cat.date_of_birth);
                 cat.display_name = cat.name.slice(org.name_prefix_length, (cat.name.length - org.name_suffix_length)).trim();
             };
@@ -24,7 +25,7 @@ const getCatsList = async(org, catName = "") => {
             console.log("No cats found for Organization", org.name);
             return [];
         }
-        console.log("Found", data.collection.length, "cats for",org.name);
+        // console.log("Found", data.collection.length, "cats for", org.name);
         // console.log("data after format checking:", data);
         return data.collection;
     } catch (err) {
