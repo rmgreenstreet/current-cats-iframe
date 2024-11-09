@@ -17,7 +17,6 @@ const getCatsList = async(org, catName = "") => {
             for (let cat of data.collection) {
                 cat = catFormatChecking(cat);
                 cat.organization_info = org;
-                console.log("Formatting cat:", cat.name);
                 cat.numerical_age = formatAge(cat.date_of_birth);
                 cat.display_name = cat.name.slice(org.name_prefix_length, (cat.name.length - org.name_suffix_length)).trim();
             };
